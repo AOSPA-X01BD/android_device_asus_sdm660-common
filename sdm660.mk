@@ -105,6 +105,10 @@ PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
     persist.vendor.data.mode=concurrent \
     ro.vendor.use_data_netmgrd=true
 
+# Dalvik dex2oat
+PRODUCT_PROPERTY_OVERRIDES += \
+    dalvik.vm.dex2oat64.enabled=true
+
 # Dalvik vm configuration
 $(call inherit-product, frameworks/native/build/phone-xhdpi-4096-dalvik-heap.mk)
 
