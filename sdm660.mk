@@ -175,7 +175,7 @@ PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
 # DRM
 PRODUCT_PACKAGES += \
     android.hardware.drm@1.4.vendor \
-    android.hardware.drm@1.4-service.clearkey
+    android.hardware.drm-service.clearkey
 
 PRODUCT_PROPERTY_OVERRIDES += \
     drm.service.enabled=true
