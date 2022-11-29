@@ -103,12 +103,14 @@ service vendor.per_mgr /system/vendor/bin/pm-service
     user system
     group system
     ioprio rt 4
+    task_profiles ServiceCapacityLow
 
 service vendor.per_proxy /system/vendor/bin/pm-proxy
     class core
     user system
     group system
     disabled
+    task_profiles ServiceCapacityLow
 
 on property:init.svc.vendor.per_mgr=running
     start vendor.per_proxy
@@ -169,6 +171,7 @@ service ppd /system/vendor/bin/mm-pp-dpps
     user system
     group system graphics
     socket pps stream 0660 system system
+    task_profiles ServiceCapacityLow
     disabled
 
 on property:init.svc.surfaceflinger=stopped
@@ -189,7 +192,15 @@ on property:init.svc.zygote=running
 on property:init.svc.zygote=restarting
     stop ppd
 
-on charger
+on property:init.svc.vendor.charger=running
+    # Keep one LITTLE and one BIG
+    write /sys/devices/system/cpu/cpu1/online 0
+    write /sys/devices/system/cpu/cpu2/online 0
+    write /sys/devices/system/cpu/cpu3/online 0
+    write /sys/devices/system/cpu/cpu5/online 0
+    write /sys/devices/system/cpu/cpu6/online 0
+    write /sys/devices/system/cpu/cpu7/online 0
+    
     start qcom-post-boot
     start vendor.hvdcp_opti
     setprop vendor.usb.controller a800000.dwc3
@@ -200,6 +211,7 @@ service vendor.hvdcp_opti /system/vendor/bin/hvdcp_opti
      class main
      user root
      group system wakelock
+     task_profiles ServiceCapacityLow
 
 service vendor.audio-hal /vendor/bin/hw/android.hardware.audio.service
     override
@@ -209,7 +221,7 @@ service vendor.audio-hal /vendor/bin/hw/android.hardware.audio.service
     group audio camera drmrpc inet media mediadrm net_bt net_bt_admin net_bw_acct oem_2901 wakelock
     capabilities BLOCK_SUSPEND
     ioprio rt 4
-    writepid /dev/cpuset/foreground/tasks /dev/stune/foreground/tasks
+    task_profiles ProcessCapacityHigh HighPerformance
     onrestart restart audioserver
 
 service vendor.sensors-hal-1-0 /vendor/bin/hw/android.hardware.sensors@1.0-service

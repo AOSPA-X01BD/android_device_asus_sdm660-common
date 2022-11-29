@@ -43,6 +43,7 @@ service nqnfc_2_0_hal_service /vendor/bin/hw/vendor.nxp.hardware.nfc@2.0-service
     class hal
     user nfc
     group nfc
+    task_profiles ServiceCapacityLow
     disabled
 
 on boot && property:ro.boot.product.hardware.sku=NFC
